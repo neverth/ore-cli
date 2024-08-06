@@ -24,11 +24,11 @@ const MIN_SOL_BALANCE: f64 = 0.005;
 
 const RPC_RETRIES: usize = 0;
 const _SIMULATION_RETRIES: usize = 4;
-const GATEWAY_RETRIES: usize = 150;
+const GATEWAY_RETRIES: usize = 300;
 const CONFIRM_RETRIES: usize = 1;
 
 const CONFIRM_DELAY: u64 = 0;
-const GATEWAY_DELAY: u64 = 300;
+const GATEWAY_DELAY: u64 = 0;
 
 pub enum ComputeBudget {
     Dynamic,
@@ -41,6 +41,10 @@ impl Miner {
         ixs: &[Instruction],
         compute_budget: ComputeBudget,
         skip_confirm: bool,
+        difficulty: u64,
+        priority_fee_difficulty_threshold: u64,
+        priority_fee_max: u64,
+        priority_fee_low: u64,
     ) -> ClientResult<Signature> {
         let progress_bar = spinner::new_progress_bar();
         let signer = self.signer();
@@ -69,8 +73,24 @@ impl Miner {
                 final_ixs.push(ComputeBudgetInstruction::set_compute_unit_limit(cus))
             }
         }
+
+        let mut priority_fee = self.priority_fee;
+
+        if priority_fee_difficulty_threshold.gt(&0u64) {
+            if difficulty > priority_fee_difficulty_threshold {
+                priority_fee = priority_fee_max;
+            } else {
+                priority_fee = priority_fee_low;
+            }
+        }
+
+        println!(
+            "send_and_confirm priority_fee {:?} ",
+            priority_fee
+        );
+
         final_ixs.push(ComputeBudgetInstruction::set_compute_unit_price(
-            self.priority_fee,
+            priority_fee,
         ));
         final_ixs.extend_from_slice(ixs);
 

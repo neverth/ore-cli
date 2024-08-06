@@ -30,6 +30,12 @@ struct Miner {
     pub keypair_filepath: Option<String>,
     pub priority_fee: u64,
     pub rpc_client: Arc<RpcClient>,
+
+    // pub rpc_client1: Arc<RpcClient>,
+    // pub rpc_client2: Arc<RpcClient>,
+    // pub rpc_client3: Arc<RpcClient>,
+    // pub rpc_client4: Arc<RpcClient>,
+
 }
 
 #[derive(Subcommand, Debug)]
@@ -79,6 +85,38 @@ struct Args {
         global = true
     )]
     rpc: Option<String>,
+
+    // #[arg(
+    //     long,
+    //     value_name = "NETWORK_URL",
+    //     help = "Network address of your RPC provider",
+    //     global = true
+    // )]
+    // aaa: String,
+
+    // #[arg(
+    //     long,
+    //     value_name = "NETWORK_URL",
+    //     help = "Network address of your RPC provider",
+    //     global = true
+    // )]
+    // rpc2: String,
+    //
+    // #[arg(
+    //     long,
+    //     value_name = "NETWORK_URL",
+    //     help = "Network address of your RPC provider",
+    //     global = true
+    // )]
+    // rpc3: String,
+    //
+    // #[arg(
+    //     long,
+    //     value_name = "NETWORK_URL",
+    //     help = "Network address of your RPC provider",
+    //     global = true
+    // )]
+    // rpc4: String,
 
     #[clap(
         global = true,
@@ -131,8 +169,17 @@ async fn main() {
     let default_keypair = args.keypair.unwrap_or(cli_config.keypair_path);
     let rpc_client = RpcClient::new_with_commitment(cluster, CommitmentConfig::confirmed());
 
+    // let rpc_client1 = RpcClient::new_with_commitment(args.aaa, CommitmentConfig::confirmed());
+    // let rpc_client2 = RpcClient::new_with_commitment(args.rpc2, CommitmentConfig::confirmed());
+    // let rpc_client3 = RpcClient::new_with_commitment(args.rpc3, CommitmentConfig::confirmed());
+    // let rpc_client4 = RpcClient::new_with_commitment(args.rpc4, CommitmentConfig::confirmed());
+
     let miner = Arc::new(Miner::new(
         Arc::new(rpc_client),
+        // Arc::new(rpc_client1),
+        // Arc::new(rpc_client2),
+        // Arc::new(rpc_client3),
+        // Arc::new(rpc_client4),
         args.priority_fee,
         Some(default_keypair),
     ));
@@ -179,11 +226,19 @@ async fn main() {
 impl Miner {
     pub fn new(
         rpc_client: Arc<RpcClient>,
+        // rpc_client1: Arc<RpcClient>,
+        // rpc_client2: Arc<RpcClient>,
+        // rpc_client3: Arc<RpcClient>,
+        // rpc_client4: Arc<RpcClient>,
         priority_fee: u64,
         keypair_filepath: Option<String>,
     ) -> Self {
         Self {
             rpc_client,
+            // rpc_client1,
+            // rpc_client2,
+            // rpc_client3,
+            // rpc_client4,
             keypair_filepath,
             priority_fee,
         }

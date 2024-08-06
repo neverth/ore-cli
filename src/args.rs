@@ -76,6 +76,34 @@ pub struct MineArgs {
         default_value = "5"
     )]
     pub buffer_time: u64,
+
+    #[arg(
+        long,
+        value_name = "MICROLAMPORTS",
+        help = "priority_fee_max",
+        default_value = "0",
+        global = true
+    )]
+    pub priority_fee_max: u64,
+
+    #[arg(
+        long,
+        value_name = "MICROLAMPORTS",
+        help = "priority_fee_low",
+        default_value = "0",
+        global = true
+    )]
+    pub priority_fee_low: u64,
+
+    #[arg(
+        long,
+        value_name = "MICROLAMPORTS",
+        help = "priority_fee_difficulty_threshold",
+        default_value = "0",
+        global = true
+    )]
+    pub priority_fee_difficulty_threshold: u64,
+
 }
 
 #[derive(Parser, Debug)]
