@@ -44,13 +44,28 @@ impl Miner {
 
             // Run drillx
             let config = get_config(&self.rpc_client).await;
+
+            println!(
+                "cutoff_time: {} ",
+                cutoff_time
+            );
+
+            println!(
+                "{:?} ",
+                config
+            );
+
+            println!(
+                "{:?} ",
+                proof.clone()
+            );
+
             let solution = Self::find_hash_par(
                 proof,
                 cutoff_time,
                 args.threads,
                 config.min_difficulty as u32,
-            )
-            .await;
+            ).await;
 
             // Submit most difficult hash
             let mut compute_budget = 500_000;
